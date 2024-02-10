@@ -1,10 +1,10 @@
 from django.urls import path
 
-from webapp.views import index
+from webapp.views import AdvertisementListView
 
 app_name = 'webapp'
 
 urlpatterns = [
-    path('', index),
-    path('home/', index, name='index'),
+    path('', AdvertisementListView.as_view()),
+    path('home/', AdvertisementListView.as_view(), name='index'),
 ]
