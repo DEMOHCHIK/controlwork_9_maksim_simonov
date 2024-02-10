@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from webapp.forms import AdvertisementForm
@@ -41,3 +42,11 @@ class AdvertisementUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('webapp:advertisement_detail', kwargs={'pk': self.object.pk})
+
+
+class MarkAsPendingDeletionView(View):
+    def post(self, request, *args, **kwargs):
+        advertisement = Advertisement.objects.get(pk=kwargs['pk'])
+        advertisement.status = 'Pending deletion'
+        advertisement.save()
+        return redirect('webapp:index')
