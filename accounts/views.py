@@ -1,9 +1,9 @@
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import login, get_user_model
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from accounts.forms import MyUserCreationForm, UserChangeForm, SearchForm
+from accounts.forms import MyUserCreationForm, UserChangeForm
 from django.contrib.auth.views import PasswordChangeView
 
 
@@ -51,19 +51,3 @@ class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
     def get_success_url(self):
         return reverse('accounts:user_detail', kwargs={'pk': self.request.user.pk})
-
-
-class UserSearchView(LoginRequiredMixin, ListView):
-    template_name = 'user_list_search.html'
-    model = get_user_model()
-    context_object_name = 'users'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        form = SearchForm(self.request.GET)
-        if form.is_valid():
-            queryset = queryset.filter(Q(first_name__icontains=form.cleaned_data['search']) |
-                                       Q(last_name__icontains=form.cleaned_data['search']) |
-                                       Q(email__icontains=form.cleaned_data['search']) |
-                                       Q(username__icontains=form.cleaned_data['search']))
-        return queryset
