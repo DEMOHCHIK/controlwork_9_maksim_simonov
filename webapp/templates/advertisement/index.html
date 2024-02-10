@@ -4,10 +4,11 @@
         {% for ad in published_ads %}
             <div class="col-lg-4 col-md-6 mb-4">
                 <a style="text-decoration: none" href="{% url 'webapp:advertisement_detail' ad.pk %}">
-                    <div class="card" style="width: 300px; height: 500px">
-                        <img style="width: 299px; height: 400px" src="{{ ad.photo.url }}" class="card-img-top"
+                    <div class="card" style="width: 300px; height: 520px">
+                        <img style="width: 299px; height: 320px" src="{{ ad.photo.url }}" class="card-img-top"
                              alt="Photo">
                         <div class="card-body">
+                            <p class="card-text"><b><a class="text-dark" style="text-decoration: none" href="{% url 'accounts:user_detail' ad.author.pk %}">{{ ad.author }}</a></b> </p>
                             <p class="card-text"><b>Заголовок:</b> {{ ad.title }}</p>
                             <p class="card-text"><b>Описание:</b> {{ ad.description }}</p>
                             <p class="card-text"><b>Цена:</b> {{ ad.price }} сом</p>

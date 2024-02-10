@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование объявления{% endblock %}
+
+{% block content %}
+    <h1 class="mt-5 mb-3">Редактировать объявление</h1>
+    {% include 'partial/form.html' with form_method="post" is_data=True value_submit='Сохранить' fields_only=False action_url=request.path %}
+{% endblock %}
