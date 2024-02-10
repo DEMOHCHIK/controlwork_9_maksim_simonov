@@ -1,7 +1,7 @@
 from django.urls import path
 
 from webapp.views import AdvertisementListView, AdvertisementDetailView, AdvertisementCreateView, \
-    AdvertisementUpdateView, MarkAsPendingDeletionView
+    AdvertisementUpdateView, MarkAsPendingDeletionView, CommentCreateView, CommentDeleteView
 
 app_name = 'webapp'
 
@@ -13,4 +13,6 @@ urlpatterns = [
     path('advertisement/<int:pk>/update/', AdvertisementUpdateView.as_view(), name='update_advertisement'),
     path('advertisement/<int:pk>/mark_as_pending_deletion/', MarkAsPendingDeletionView.as_view(),
          name='mark_as_pending_deletion'),
+    path('advertisement/<int:pk>/comment/create/', CommentCreateView.as_view(), name='comment_create'),
+    path('comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -20,6 +20,13 @@ class AdvertisementDetailView(DetailView):
     model = Advertisement
     template_name = 'advertisement/detail.html'
     context_object_name = 'advertisement'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        advertisement = self.get_object()
+        context['comments'] = advertisement.comment_set.order_by(
+            '-created_at')
+        return context
 
 
 class AdvertisementCreateView(CreateView):
