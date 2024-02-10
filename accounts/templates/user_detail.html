@@ -42,7 +42,7 @@
         {% for ad in advertisements %}
             <div class="col-lg-4 col-md-6 mb-4">
                 <a style="text-decoration: none" href="{% url 'webapp:advertisement_detail' ad.pk %}">
-                    <div class="card" style="width: 300px; height: 530px">
+                    <div class="card" style="width: 300px; height: 480px">
                         <img style="width: 299px; height: 320px" src="{{ ad.photo.url }}" class="card-img-top"
                              alt="Photo">
                         <div class="card-body">
@@ -51,7 +51,6 @@
                             </span><br>
                             <span>{{ ad.author.phone_number }}</span>
                             <p class="card-text"><b>Заголовок:</b> {{ ad.title }}</p>
-                            <p class="card-text"><b>Описание:</b> {{ ad.description }}</p>
                             <p class="card-text"><b>Цена:</b> {{ ad.price }} сом</p>
                         </div>
                     </div>

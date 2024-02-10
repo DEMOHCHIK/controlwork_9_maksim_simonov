@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="row">
-        {% for ad in published_ads %}
+        {% for ad in advertisements %}
             <div class="col-lg-4 col-md-6 mb-4">
                 <a style="text-decoration: none" href="{% url 'webapp:advertisement_detail' ad.pk %}">
-                    <div class="card" style="width: 300px; height: 480px">
+                    <div class="card" style="width: 300px; height: 560px">
                         <img style="width: 299px; height: 320px" src="{{ ad.photo.url }}" class="card-img-top"
                              alt="Photo">
                         <div class="card-body">
                             <span class="card-text"><b><a class="text-dark" style="text-decoration: none"
-                                                       href="{% url 'accounts:user_detail' ad.author.pk %}">{{ ad.author }}</a></b>
+                                                          href="{% url 'accounts:user_detail' ad.author.pk %}">{{ ad.author }}</a></b>
                             </span><br>
                             <span>{{ ad.author.phone_number }}</span>
                             <p class="card-text"><b>Заголовок:</b> {{ ad.title }}</p>
+                            <p class="card-text"><b>Статус:</b> <span id="status-{{ ad.pk }}">{{ ad.get_status_display }}</span></p>
                             <p class="card-text"><b>Цена:</b> {{ ad.price }} сом</p>
+                            <div class="card_link">
+                                <a class="btn btn-primary action-link"
+                                   href="{% url 'webapp:approve_advertisement' pk=ad.pk %}"
+                                   data-pk="{{ ad.pk }}">Одобрить</a>
+                                <a class="btn btn-danger action-link"
+                                   href="{% url 'webapp:reject_advertisement' pk=ad.pk %}"
+                                   data-pk="{{ ad.pk }}">Отклонить</a>
+                            </div>
                         </div>
                     </div>
                 </a>

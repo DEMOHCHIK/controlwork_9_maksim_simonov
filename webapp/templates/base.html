@@ -18,13 +18,15 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div>
-                <a class="nav-link" href="{% url 'webapp:create_advertisement' %}">Добавить Объявление</a>
-            </div>
+            {% if request.user.is_authenticated %}
+                <div>
+                    <a class="nav-link" href="{% url 'webapp:create_advertisement' %}">Добавить Объявление</a>
+                </div>
+            {% endif %}
             <div class="mx-auto">
-                <a class="nav-link" href="#">Страница Модератора</a>
+                <a class="nav-link" href="{% url 'webapp:moderator_list' %}">Объявления на проверку</a>
             </div>
-            <div class="d-flex">
+            <div class="d-flex ms-auto">
                 {% if not request.user.is_authenticated %}
                     <a class="text-primary-emphasis text-decoration-none me-3" aria-current="page"
                        href="{% url 'accounts:user_create' %}?next={{ request.get_full_path }}">Регистрация</a>
@@ -34,6 +36,7 @@
                     {% if  user_obj != request.user %}
                         <a href="{% url 'accounts:user_detail' request.user.id %}"
                            class="me-3 text-dark"><i class="bi bi-person-circle fs-2"></i></a>
+
                     {% else %}
                         <form action="{% url 'accounts:logout' %}?next={{ request.get_full_path }}" method="post">
                             {% csrf_token %}
@@ -50,6 +53,38 @@
     {% block content %}
     {% endblock %}
 </div>
+
+<script>
+    async function makeRequest(url, method = 'POST') {
+        let response = await fetch(url, {method});
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            let error = new Error(response.statusText);
+            error.response = response;
+            throw error;
+        }
+    }
+
+    async function onClick(e) {
+        e.preventDefault();
+        let link = e.target.closest('.action-link');
+        let url = link.getAttribute('data-action');
+        let response = await makeRequest(url);
+        let statusElement = document.getElementById('status-' + link.dataset.pk);
+        statusElement.innerText = response.status;
+    }
+
+    function onLoad() {
+        let links = document.querySelectorAll('.action-link');
+        for (let link of links) {
+            link.addEventListener('click', onClick);
+        }
+    }
+
+    window.addEventListener('load', onLoad);
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

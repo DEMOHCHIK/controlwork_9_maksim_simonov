@@ -1,10 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from webapp.models import Advertisement, Comment
 
 
-class CommentCreateView(View):
+class CommentCreateView(LoginRequiredMixin, View):
     def post(self, request, pk):
         text = request.POST.get('text')
         advertisement = get_object_or_404(Advertisement, pk=pk)
@@ -13,7 +14,7 @@ class CommentCreateView(View):
         return redirect('webapp:advertisement_detail', pk=pk)
 
 
-class CommentDeleteView(View):
+class CommentDeleteView(LoginRequiredMixin, View):
     def post(self, request, pk):
         comment = get_object_or_404(Comment, pk=pk)
         advertisement_pk = comment.advertisement.pk
