@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from accounts.forms import MyUserCreationForm, UserChangeForm
 from django.contrib.auth.views import PasswordChangeView
 
+from webapp.models import Advertisement
+
 
 class RegisterView(CreateView):
     model = get_user_model()
@@ -31,6 +33,15 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = 'user_detail.html'
     context_object_name = 'user_obj'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        if self.request.user == user:
+            context['advertisements'] = Advertisement.objects.filter(author=user).exclude(status='Pending deletion')
+        else:
+            context['advertisements'] = Advertisement.objects.filter(author=user, status='Published')
+        return context
 
 
 class UserChangeView(LoginRequiredMixin, UpdateView):

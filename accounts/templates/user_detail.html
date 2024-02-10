@@ -13,14 +13,14 @@
 {% endif %}
 {% block content %}
 
-    <div class="d-flex mt-5">
+    <div class="d-flex mt-5 mb-5">
         <div class="mx-5 align-self-center">
             <div class="d-inline-block rounded-circle overflow-hidden" style="width: 200px; height: 200px; ">
                 <img src="{{ user_obj.avatar.url }}" class="object-fit-cover w-100 h-100" alt="...">
             </div>
         </div>
         <div class="mx-5 align-self-center">
-            <div class="d-flex">
+            <div class="d-flex mb-3">
                 <h2 class="fw-lighter">{{ user_obj.username }}</h2>
                 {% if request.user.is_authenticated and request.user == user_obj %}
                     <a class="btn btn-outline-secondary align-self-center ms-3"
@@ -31,8 +31,32 @@
                        role="button">Смена пароля</a>
                 {% endif %}
             </div>
-            <p>{{ user_obj.get_full_name }}</p>
-            <p>{{ user_obj.user_information }}</p>
+            <p><b>Полное имя:</b> {{ user_obj.get_full_name }}</p>
+            <p><b>Информация:</b> {{ user_obj.user_information }}</p>
+            <p><b>Телефонный номер:</b> {{ user_obj.phone_number }}</p>
         </div>
+    </div>
+
+    <h3 class="mb-3">Все объявления:</h3>
+    <div class="row">
+        {% for ad in advertisements %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <a style="text-decoration: none" href="{% url 'webapp:advertisement_detail' ad.pk %}">
+                    <div class="card" style="width: 300px; height: 530px">
+                        <img style="width: 299px; height: 320px" src="{{ ad.photo.url }}" class="card-img-top"
+                             alt="Photo">
+                        <div class="card-body">
+                            <span class="card-text"><b><a class="text-dark" style="text-decoration: none"
+                                                       href="{% url 'accounts:user_detail' ad.author.pk %}">{{ ad.author }}</a></b>
+                            </span><br>
+                            <span>{{ ad.author.phone_number }}</span>
+                            <p class="card-text"><b>Заголовок:</b> {{ ad.title }}</p>
+                            <p class="card-text"><b>Описание:</b> {{ ad.description }}</p>
+                            <p class="card-text"><b>Цена:</b> {{ ad.price }} сом</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
